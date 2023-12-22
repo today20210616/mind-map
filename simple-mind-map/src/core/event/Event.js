@@ -146,11 +146,22 @@ class Event extends EventEmitter {
     if (e.deltaX < 0) dirs.push(CONSTANTS.DIR.LEFT)
     if (e.deltaX > 0) dirs.push(CONSTANTS.DIR.RIGHT)
     // 判断是否是触控板
+    console.log("ontouchstart: " + ('ontouchstart' in window))
+    console.log("maxTouchPoints: " + navigator.maxTouchPoints)
+    console.log("msMaxTouchPoints: " + navigator.msMaxtouchPoints)
+    console.log("window.PointerEvent: " + window.PointerEvent)
+    console.log("window.MSPointerEvent: " + window.MSPointerEvent)
+
+
     let isTouchPad = false
+    // console.log("condition1: " + (e.wheelDeltaY === e.deltaY * -3)) 
+    // console.log("condition2: " + (Math.abs(e.wheelDeltaY) <= 10))
+    // console.log("condition2: -----: " + (Math.abs(e.wheelDeltaY)))
+    // console.log("condition3: " + (e.deltaMode === 0 ))
     // mac、windows
-    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) < 220) {
       isTouchPad = true
-    }
+    } 
     this.emit('mousewheel', e, dirs, this, isTouchPad)
   }
 

@@ -97,7 +97,8 @@ class View {
         }
       } else {
         // 2.鼠标滚轮事件控制画布移动
-        const step = isTouchPad ? 5 : mousewheelMoveStep
+        const step = isTouchPad ? 18 : mousewheelMoveStep
+        //console.log(step)
         let mx = 0
         let my = 0
         // 如果来自触控板，那么过滤掉左右的移动
