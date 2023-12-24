@@ -121,11 +121,11 @@ class View {
         }
         // 右移
         if (dirs.includes(CONSTANTS.DIR.LEFT)) {
-          mx = step
+          mx = 0
         }
         // 左移
         if (dirs.includes(CONSTANTS.DIR.RIGHT)) {
-          mx = -step
+          mx = 0
         }
         this.translateXY(mx, my)
       }
