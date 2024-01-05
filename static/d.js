@@ -22,9 +22,32 @@ const setTakeOverAppMethods = (data) => {
     }
     // 保存思维导图数据的函数
     window.takeOverAppMethods.saveMindMapData = (data) => {
-        console.log('保存函数调用')
-        //console.log(JSON.stringify(data))
-    }
+        console.log('保存函数调用');
+      
+        // const url = 'http://10.22.0.123:8000/items/1';
+        // const requestBody = {
+        //   SIMPLE_MIND_MAP_DATAA: data
+        // };
+      
+        // fetch(url, {
+        //   method: 'PUT',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify(requestBody)
+        // })
+        //   .then(response => {
+        //     if (response.ok) {
+        //       console.log('保存成功');
+        //     } else {
+        //       console.log('保存失败');
+        //     }
+        //   })
+        //   .catch(error => {
+        //     console.log('保存失败:', error);
+        //   });
+      };
+      
     // 获取语言的函数
     window.takeOverAppMethods.getLanguage = () => {
         console.log('获取语言的函数')
