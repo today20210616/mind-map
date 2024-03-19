@@ -45,7 +45,10 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
-import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+// 协同编辑插件
+// import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+// 手绘风格插件，该插件为付费插件，详情请查看开发文档
+// import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -95,7 +98,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
-// .usePlugin(Cooperate)// 协同插件
+// .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -147,7 +150,8 @@ export default {
       isShowScrollbar: state => state.localConfig.isShowScrollbar,
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
-      isShowScrollbar: state => state.localConfig.isShowScrollbar
+      isUseHandDrawnLikeStyle: state =>
+        state.localConfig.isUseHandDrawnLikeStyle
     })
   },
   watch: {
@@ -163,6 +167,13 @@ export default {
         this.addScrollbarPlugin()
       } else {
         this.removeScrollbarPlugin()
+      }
+    },
+    isUseHandDrawnLikeStyle() {
+      if (this.isUseHandDrawnLikeStyle) {
+        this.addHandDrawnLikeStylePlugin()
+      } else {
+        this.removeHandDrawnLikeStylePlugin()
       }
     }
   },
@@ -338,6 +349,27 @@ export default {
               break
           }
         }
+        // beforeShortcutRun: (key, activeNodeList) => {
+        //   console.log(key, activeNodeList)
+        //   // 阻止删除快捷键行为
+        //   if (key === 'Backspace') {
+        //     return true
+        //   }
+        // }
+        // handleNodePasteImg: img => {
+        //   console.log(img)
+        //   return new Promise(resolve => {
+        //     setTimeout(() => {
+        //       resolve({
+        //         url: require('../../../assets/img/themes/autumn.jpg'),
+        //         size: {
+        //           width: 100,
+        //           height: 100
+        //         }
+        //       })
+        //     }, 200)
+        //   })
+        // }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -386,6 +418,7 @@ export default {
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
+      if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
@@ -544,6 +577,27 @@ export default {
       this.mindMap.removePlugin(ScrollbarPlugin)
     },
 
+    // 加载手绘风格插件
+    addHandDrawnLikeStylePlugin() {
+      try {
+        if (!this.mindMap) return
+        this.mindMap.addPlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
+    },
+
+    // 移除手绘风格插件
+    removeHandDrawnLikeStylePlugin() {
+      try {
+        this.mindMap.removePlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
+    },
+
     // 测试动态插入节点
     testDynamicCreateNodes() {
       // return
@@ -656,7 +710,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://192.168.3.125:4444']
+          signalingList: ['ws://10.16.83.11:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),

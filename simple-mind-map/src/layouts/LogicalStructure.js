@@ -178,11 +178,13 @@ class LogicalStructure extends Base {
       let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
-      let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${
-        x2 + nodeUseLineStyleOffset
-      },${y2}`
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      let path = this.createFoldLine([
+        [x1, y1],
+        [x1 + s1, y1],
+        [x1 + s1, y2],
+        [x2 + nodeUseLineStyleOffset, y2]
+      ])
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -195,10 +197,12 @@ class LogicalStructure extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
-      let x1 =
-        node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
+      let x1 = left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
@@ -209,8 +213,7 @@ class LogicalStructure extends Base {
         ? ` L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -223,10 +226,19 @@ class LogicalStructure extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const {
+      nodeUseLineStyle,
+      rootLineStartPositionKeepSameInCurve,
+      rootLineKeepSameInCurve
+    } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
       let x1 =
-        node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+        node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
+          ? left + width / 2
+          : left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
@@ -237,13 +249,12 @@ class LogicalStructure extends Base {
       let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left + item.width},${y2}`
         : ''
-      if (node.isRoot && !this.mindMap.themeConfig.rootLineKeepSameInCurve) {
+      if (node.isRoot && !rootLineKeepSameInCurve) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
         path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath
       }
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 

@@ -329,13 +329,8 @@ export const ERROR_TYPES = {
   LOAD_CLIPBOARD_IMAGE_ERROR: 'load_clipboard_image_error',
   BEFORE_TEXT_EDIT_ERROR: 'before_text_edit_error',
   EXPORT_ERROR: 'export_error',
-  EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error'
-}
-
-// a4纸的宽高
-export const a4Size = {
-  width: 592.28,
-  height: 841.89
+  EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error',
+  DATA_CHANGE_DETAIL_EVENT_ERROR: 'data_change_detail_event_error'
 }
 
 // css
@@ -351,7 +346,7 @@ export const cssContent = `
     display: block;
   }
 
-  .smm-node.active .smm-hover-node{
+  .smm-node.active .smm-hover-node, .smm-node-highlight .smm-hover-node{
     display: block;
     opacity: 1;
     stroke-width: 2;

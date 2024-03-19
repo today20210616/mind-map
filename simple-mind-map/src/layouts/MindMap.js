@@ -116,11 +116,7 @@ class MindMap extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginY = this.getMarginY(layerIndex + 1)
           let baseTop = node.top + node.height / 2 + marginY
           // 第一个子节点的top值 = 该节点中心的top值 - 子节点的高度之和的一半
@@ -244,11 +240,13 @@ class MindMap extends Base {
       let y2 = item.top + item.height / 2
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
-      let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${
-        x2 + nodeUseLineStyleOffset
-      },${y2}`
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      let path = this.createFoldLine([
+        [x1, y1],
+        [x1 + _s, y1],
+        [x1 + _s, y2],
+        [x2 + nodeUseLineStyleOffset, y2]
+      ])
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -261,12 +259,13 @@ class MindMap extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
       let x1 =
-        node.layerIndex === 0
-          ? left + width / 2
-          : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+        item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
           ? left - expandBtnSize
           : left + width + expandBtnSize
       let y1 = top + height / 2
@@ -287,8 +286,7 @@ class MindMap extends Base {
         }
       }
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -301,10 +299,17 @@ class MindMap extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const {
+      nodeUseLineStyle,
+      rootLineKeepSameInCurve,
+      rootLineStartPositionKeepSameInCurve
+    } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
       let x1 =
-        node.layerIndex === 0
+        node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
           ? left + width / 2
           : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
           ? left - expandBtnSize
@@ -320,20 +325,19 @@ class MindMap extends Base {
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
-      if (this.mindMap.themeConfig.nodeUseLineStyle) {
+      if (nodeUseLineStyle) {
         if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
           nodeUseLineStylePath = ` L ${item.left},${y2}`
         } else {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
         }
       }
-      if (node.isRoot && !this.mindMap.themeConfig.rootLineKeepSameInCurve) {
+      if (node.isRoot && !rootLineKeepSameInCurve) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
         path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath
       }
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -384,7 +388,8 @@ class MindMap extends Base {
         x +
         (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
         (isLeft ? item.generalizationNode.width : 0)
-        item.generalizationNode.top = top + (bottom - top - item.generalizationNode.height) / 2
+      item.generalizationNode.top =
+        top + (bottom - top - item.generalizationNode.height) / 2
     })
   }
 

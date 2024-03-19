@@ -246,8 +246,7 @@ class VerticalTimeline extends Base {
         let y2 = item.top
         let x = node.left + node.width / 2
         let path = `M ${x},${y1} L ${x},${y2}`
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
         prevBother = item
       })
     } else {
@@ -260,13 +259,13 @@ class VerticalTimeline extends Base {
         node.children.forEach((item, index) => {
           let itemLeft = item.left
           let itemYCenter = item.top + item.height / 2
-          let path = `
-            M ${nodeRight},${nodeYCenter} 
-            L ${nodeRight + offset},${nodeYCenter} 
-            L ${nodeRight + offset},${itemYCenter} 
-            L ${itemLeft},${itemYCenter}`
-          lines[index].plot(path)
-          style && style(lines[index], item)
+          let path = this.createFoldLine([
+            [nodeRight, nodeYCenter],
+            [nodeRight + offset, nodeYCenter],
+            [nodeRight + offset, itemYCenter],
+            [itemLeft, itemYCenter]
+          ])
+          this.setLineStyle(style, lines[index], path, item)
         })
       } else {
         let nodeLeft = node.left
@@ -276,13 +275,13 @@ class VerticalTimeline extends Base {
         node.children.forEach((item, index) => {
           let itemRight = item.left + item.width
           let itemYCenter = item.top + item.height / 2
-          let path = `
-            M ${nodeLeft},${nodeYCenter} 
-            L ${nodeLeft - offset},${nodeYCenter} 
-            L ${nodeLeft - offset},${itemYCenter} 
-            L ${itemRight},${itemYCenter}`
-          lines[index].plot(path)
-          style && style(lines[index], item)
+          let path = this.createFoldLine([
+            [nodeLeft, nodeYCenter],
+            [nodeLeft - offset, nodeYCenter],
+            [nodeLeft - offset, itemYCenter],
+            [itemRight, itemYCenter]
+          ])
+          this.setLineStyle(style, lines[index], path, item)
         })
       }
     }
@@ -306,8 +305,7 @@ class VerticalTimeline extends Base {
           let y2 = item.top
           let x = node.left + node.width / 2
           let path = `M ${x},${y1} L ${x},${y2}`
-          lines[index].plot(path)
-          style && style(lines[index], item)
+          this.setLineStyle(style, lines[index], path, item)
           prevBother = item
         })
       } else {
@@ -322,8 +320,7 @@ class VerticalTimeline extends Base {
             : item.left
         let y2 = item.top + item.height / 2
         let path = `M ${x1},${y1} L ${x2},${y2}`
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
       }
     })
   }
@@ -346,8 +343,7 @@ class VerticalTimeline extends Base {
           let y2 = item.top
           let x = node.left + node.width / 2
           let path = `M ${x},${y1} L ${x},${y2}`
-          lines[index].plot(path)
-          style && style(lines[index], item)
+          this.setLineStyle(style, lines[index], path, item)
           prevBother = item
         })
       } else {
@@ -362,8 +358,7 @@ class VerticalTimeline extends Base {
             : item.left
         let y2 = item.top + item.height / 2
         let path = this.cubicBezierPath(x1, y1, x2, y2)
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
       }
     })
   }
@@ -403,7 +398,7 @@ class VerticalTimeline extends Base {
       let cx = x1 + (isLeft ? -20 : 20)
       let cy = y1 + (y2 - y1) / 2
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.left =
         x +
         (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -

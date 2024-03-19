@@ -42,10 +42,10 @@ a.click()
 <p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+, V0.7.0+abandoned, Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio</p>
 </li>
 <li>
-<p><code>checkRotate</code>: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees</p>
+<p><code>checkRotate</code>: v0.7.0+, (v0.9.2+obsolete), Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees</p>
 </li>
 <li>
-<p><code>compress</code>：v0.8.1+，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally</p>
+<p><code>compress</code>：v0.8.1+, (v0.9.2+obsolete)，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally</p>
 </li>
 </ul>
 <p>Exports as <code>png</code>.</p>
@@ -69,7 +69,10 @@ a.click()
 )
 </code></pre>
 <p>Exports as <code>svg</code>.</p>
-<h3>pdf(name, useMultiPageExport, maxImageWidth)</h3>
+<h3>pdf(name, transparent = false)</h3>
+<blockquote>
+<p>v0.8.1：pdf(name, useMultiPageExport, maxImageWidth)</p>
+</blockquote>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
@@ -78,15 +81,24 @@ a.click()
 <p><code>name</code>：File name</p>
 </li>
 <li>
-<p><code>useMultiPageExport</code>: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page</p>
+<p><code>useMultiPageExport</code>: v0.6.15+, (v0.9.2+obsolete), Boolean, false, Whether to export multiple pages, default to single page</p>
 </li>
 <li>
-<p><code>maxImageWidth</code>：v0.8.1+，null | Number，The default is twice the width of A4 paper, which is a parameter for compressing images. In some cases, the length and width of the image may be very large, resulting in a very large PDF volume. Therefore, if you want to reduce the volume, you can use this parameter to control the maximum width of the image</p>
+<p><code>maxImageWidth</code>：v0.8.1+, (v0.9.2+obsolete)，null | Number，The default is twice the width of A4 paper, which is a parameter for compressing images. In some cases, the length and width of the image may be very large, resulting in a very large PDF volume. Therefore, if you want to reduce the volume, you can use this parameter to control the maximum width of the image</p>
+</li>
+<li>
+<p><code>transparent</code>：v0.9.2+，Boolean，default is false，Specify whether the background of the exported image is transparent</p>
 </li>
 </ul>
 <p>Export as <code>pdf</code>. Unlike other export methods, this method does not return data and directly triggers the download.</p>
 <blockquote>
+<p>In versions before v0.9.3, this method does not return data and will directly trigger the download.</p>
+</blockquote>
+<blockquote>
 <p>After v0.6.0, an additional ExportPDF plugin needs to be registered</p>
+</blockquote>
+<blockquote>
+<p>The internal export of PDF uses the PDF lib library to convert images into PDF. Currently, when exporting PDF with a large number of nodes, some content may be lost. Therefore, it is recommended that capable developers implement the PDF export function themselves. If there are backend developers in the project, they can also seek support from backend developers.</p>
 </blockquote>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> ExportPDF <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportPDF.js&#x27;</span>
 MindMap.usePlugin(ExportPDF)
@@ -115,6 +127,11 @@ MindMap.usePlugin(ExportPDF)
 MindMap.usePlugin(ExportXMind)
 </code></pre>
 <p>Export as an <code>xmind</code> file type, asynchronous method, returns a <code>Promise</code> instance, and the returned data is the <code>data:url</code> data of a <code>zip</code> compressed package, which can be directly downloaded.</p>
+<h3>txt()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Export as <code>txt</code> file.</p>
 
   </div>
 </template>

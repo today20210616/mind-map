@@ -2,6 +2,7 @@ import {
   checkIsNodeStyleDataKey,
   generateColorByContent
 } from '../../../utils/index'
+import { Gradient } from '@svgdotjs/svg.js'
 
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
@@ -55,6 +56,11 @@ class Style {
   //  构造函数
   constructor(ctx) {
     this.ctx = ctx
+    // 箭头图标
+    this._markerPath = null
+    this._marker = null
+    // 渐变背景
+    this._gradient = null
   }
 
   //  合并样式
@@ -97,11 +103,22 @@ class Style {
     node.radius(this.merge('borderRadius'))
   }
 
-  //   矩形外的其他形状
+  // 形状
   shape(node) {
-    node.fill({
-      color: this.merge('fillColor')
-    })
+    if (this.merge('gradientStyle')) {
+      if (!this._gradient) {
+        this._gradient = this.ctx.nodeDraw.gradient('linear')
+      }
+      this._gradient.update(add => {
+        add.stop(0, this.merge('startColor'))
+        add.stop(1, this.merge('endColor'))
+      })
+      node.fill(this._gradient)
+    } else {
+      node.fill({
+        color: this.merge('fillColor')
+      })
+    }
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
     // if (
     //   !this.ctx.isRoot &&
@@ -190,8 +207,43 @@ class Style {
   }
 
   //  连线
-  line(node, { width, color, dasharray } = {}) {
-    node.stroke({ width, color, dasharray }).fill({ color: 'none' })
+  line(line, { width, color, dasharray } = {}, enableMarker, childNode) {
+    line.stroke({ color, dasharray, width }).fill({ color: 'none' })
+    // 可以显示箭头
+    if (enableMarker) {
+      const showMarker = this.merge('showLineMarker', true)
+      const childNodeStyle = childNode.style
+      // 显示箭头
+      if (showMarker) {
+        // 创建子节点箭头标记
+        childNodeStyle._marker =
+          childNodeStyle._marker || childNodeStyle.createMarker()
+        // 设置样式
+        childNodeStyle._markerPath.stroke({ color }).fill({ color })
+        // 箭头位置可能会发生改变，所以需要先删除
+        line.attr('marker-start', '')
+        line.attr('marker-end', '')
+        const dir = childNodeStyle.merge('lineMarkerDir')
+        line.marker(dir, childNodeStyle._marker)
+      } else if (childNodeStyle._marker) {
+        // 不显示箭头，则删除该子节点的箭头标记
+        line.attr('marker-start', '')
+        line.attr('marker-end', '')
+        childNodeStyle._marker.remove()
+        childNodeStyle._marker = null
+      }
+    }
+  }
+
+  // 创建箭头
+  createMarker() {
+    return this.ctx.lineDraw.marker(20, 20, add => {
+      add.ref(8, 5)
+      add.size(20, 20)
+      add.attr('markerUnits', 'userSpaceOnUse')
+      add.attr('orient', 'auto-start-reverse')
+      this._markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
+    })
   }
 
   //  概要连线
@@ -239,6 +291,22 @@ class Style {
     node.radius(5).fill('none').stroke({
       color: hoverRectColor
     })
+  }
+
+  // 所属节点被删除时的操作
+  onRemove() {
+    if (this._marker) {
+      this._marker.remove()
+      this._marker = null
+    }
+    if (this._markerPath) {
+      this._markerPath.remove()
+      this._markerPath = null
+    }
+    if (this._gradient) {
+      this._gradient.remove()
+      this._gradient = null
+    }
   }
 }
 

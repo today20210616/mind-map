@@ -5,13 +5,13 @@
 <blockquote>
 <p>要使用导出功能需要使用导出插件。</p>
 </blockquote>
-<p>目前支持导出为<code>.smm</code>、<code>.json</code>、<code>.svg</code>、<code>.png</code>、<code>.pdf</code>、<code>.md</code>、<code>.xmind</code>文件。</p>
+<p>目前支持导出为<code>.smm</code>、<code>.json</code>、<code>.svg</code>、<code>.png</code>、<code>.pdf</code>、<code>.md</code>、<code>.xmind</code>、<code>.txt</code>文件。</p>
 <p><code>.smm</code>是<code>simple-mind-map</code>自己定义的一种文件，其实就是<code>json</code>文件，换了一个扩展名而已。</p>
 <p>导出直接调用<code>export</code>方法即可：</p>
 <pre class="hljs"><code>mindMap.export(type, isDownload, fileName, ...)
 </code></pre>
 <p><code>type</code>：文件类型</p>
-<p><code>isDownload</code>：传<code>true</code>会触发下载，<code>false</code>则不会，函数会返回导出文件的数据，<code>data:url</code>格式，你可以自行下载，<code>pdf</code>不支持该参数，默认会直接下载。</p>
+<p><code>isDownload</code>：传<code>true</code>会触发下载，<code>false</code>则不会，函数会返回导出文件的数据，<code>data:url</code>格式，你可以自行下载，（v0.9.2之前的版本，<code>pdf</code>不支持该参数，默认会直接下载）。</p>
 <p><code>fileName</code>：下载的文件名称</p>
 <h3>导出为smm、json</h3>
 <p>这两种文件的导出是一样的：</p>
@@ -74,6 +74,13 @@ mindMap.export(<span class="hljs-string">&#x27;pdf&#x27;</span>, <span class="hl
 </blockquote>
 <p>导出为<code>Xmind</code>新版文件。</p>
 <pre class="hljs"><code>mindMap.export(<span class="hljs-string">&#x27;xmind&#x27;</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
+</code></pre>
+<h3>导出为txt</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>导出为<code>txt</code>文件只要传递默认的三个参数即可：</p>
+<pre class="hljs"><code>mindMap.export(<span class="hljs-string">&#x27;txt&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
 </code></pre>
 <h2>导入</h2>
 <p>目前支持从<code>.smm</code>、<code>.json</code>、<code>.xmind</code>、<code>.xlsx</code>、<code>.md</code>格式的文件导入。</p>

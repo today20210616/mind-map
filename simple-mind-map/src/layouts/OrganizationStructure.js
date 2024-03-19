@@ -78,11 +78,7 @@ class OrganizationStructure extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginX = this.getMarginY(layerIndex + 1)
           // 第一个子节点的left值 = 该节点中心的left值 - 子节点的宽度之和的一半
           let left = node.left + node.width / 2 - node.childrenAreaWidth / 2
@@ -165,18 +161,18 @@ class OrganizationStructure extends Base {
       return []
     }
     let { left, top, width, height } = node
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     let x1 = left + width / 2
     let y1 = top + height
     node.children.forEach((item, index) => {
       let x2 = item.left + item.width / 2
       let y2 = item.top
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -210,8 +206,7 @@ class OrganizationStructure extends Base {
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x2},${y1 + s1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
     minx = Math.min(x1, minx)
     maxx = Math.max(x1, maxx)
@@ -219,14 +214,16 @@ class OrganizationStructure extends Base {
     let line1 = this.lineDraw.path()
     node.style.line(line1)
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
-    line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    line1.plot(
+      this.transformPath(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    )
     node._lines.push(line1)
     style && style(line1, node)
     // 水平线
     if (len > 0) {
       let lin2 = this.lineDraw.path()
       node.style.line(lin2)
-      lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
+      lin2.plot(this.transformPath(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`))
       node._lines.push(lin2)
       style && style(lin2, node)
     }
@@ -259,11 +256,11 @@ class OrganizationStructure extends Base {
       let cx = x1 + (x2 - x1) / 2
       let cy = y1 + 20
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.top = bottom + generalizationNodeMargin
-      item.generalizationNode.left = left + (right - left - item.generalizationNode.width) / 2
+      item.generalizationNode.left =
+        left + (right - left - item.generalizationNode.width) / 2
     })
-    
   }
 
   // 渲染展开收起按钮的隐藏占位元素

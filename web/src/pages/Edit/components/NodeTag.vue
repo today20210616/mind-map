@@ -3,7 +3,8 @@
     class="nodeTagDialog"
     :title="$t('nodeTag.title')"
     :visible.sync="dialogVisible"
-    width="500"
+    :width="isMobile ? '90%' : '50%'"
+    :top="isMobile ? '20px' : '15vh'"
   >
     <el-input
       v-model="tag"
@@ -39,7 +40,10 @@
 </template>
 
 <script>
-import { generateColorByContent } from 'simple-mind-map/src/utils/index'
+import {
+  generateColorByContent,
+  isMobile
+} from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -54,7 +58,15 @@ export default {
       tagArr: [],
       tag: '',
       activeNodes: [],
-      max: 5
+      max: 5,
+      isMobile: isMobile()
+    }
+  },
+  watch: {
+    dialogVisible(val, oldVal) {
+      if (!val && oldVal) {
+        this.$bus.$emit('endTextEdit')
+      }
     }
   },
   created() {
@@ -110,7 +122,6 @@ export default {
      */
     cancel() {
       this.dialogVisible = false
-      this.$bus.$emit('endTextEdit')
     },
 
     /**

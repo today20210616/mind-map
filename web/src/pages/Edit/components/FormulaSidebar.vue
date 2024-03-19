@@ -34,6 +34,7 @@
 import Sidebar from './Sidebar'
 import { mapState, mapMutations } from 'vuex'
 import { formulaList } from '@/config/constant'
+import 'katex/dist/katex.min.css'
 
 export default {
   name: 'FormulaSidebar',
@@ -52,7 +53,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark', 'localConfig'])
+    ...mapState({
+      activeSidebar: state => state.activeSidebar, 
+      isDark: state => state.localConfig.isDark, 
+      localConfig: state => state.localConfig
+    })
   },
   watch: {
     activeSidebar(val) {
@@ -78,10 +83,10 @@ export default {
     init() {
       this.list = formulaList.map(item => {
         return {
-          overview: window.katex.renderToString(item, {
-            throwOnError: false,
-            output: 'mathml'
-          }),
+          overview: window.katex.renderToString(
+            item,
+            this.mindMap.formula.getKatexConfig()
+          ),
           text: item
         }
       })

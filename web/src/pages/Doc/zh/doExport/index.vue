@@ -42,10 +42,10 @@ a.click()
 <p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，v0.7.0+已废弃，Boolean, false, 是否在图片宽比高长时自动旋转90度</p>
 </li>
 <li>
-<p><code>checkRotate</code>：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度</p>
+<p><code>checkRotate</code>：v0.7.0+，（v0.9.2+已废弃），Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度</p>
 </li>
 <li>
-<p><code>compress</code>：v0.8.1+，null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放</p>
+<p><code>compress</code>：v0.8.1+，（v0.9.2+已废弃），null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放</p>
 </li>
 </ul>
 <p>导出为<code>png</code>。</p>
@@ -69,7 +69,10 @@ a.click()
 )
 </code></pre>
 <p>导出为<code>svg</code>。</p>
-<h3>pdf(name, useMultiPageExport, maxImageWidth)</h3>
+<h3>pdf(name, transparent = false)</h3>
+<blockquote>
+<p>v0.8.1：pdf(name, useMultiPageExport, maxImageWidth)</p>
+</blockquote>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
@@ -78,15 +81,24 @@ a.click()
 <p><code>name</code>：文件名称</p>
 </li>
 <li>
-<p><code>useMultiPageExport</code>: v0.6.15+，Boolean, false, 是否多页导出，默认为单页</p>
+<p><code>useMultiPageExport</code>: v0.6.15+，（v0.9.2+已废弃），Boolean, false, 是否多页导出，默认为单页</p>
 </li>
 <li>
-<p><code>maxImageWidth</code>：v0.8.1+，null | Number，默认为a4纸的宽度的2倍, 压缩图片的参数，某些情况下图片的长宽可能非常大，导致pdf体积也非常大，所以如果希望减小体积，那么可以通过该参数来控制图片的最大宽度</p>
+<p><code>maxImageWidth</code>：v0.8.1+，（v0.9.2+已废弃），null | Number，默认为a4纸的宽度的2倍, 压缩图片的参数，某些情况下图片的长宽可能非常大，导致pdf体积也非常大，所以如果希望减小体积，那么可以通过该参数来控制图片的最大宽度</p>
+</li>
+<li>
+<p><code>transparent</code>：v0.9.2+，Boolean，默认为false，指定导出图片的背景是否是透明的</p>
 </li>
 </ul>
-<p>导出为<code>pdf</code>，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。</p>
+<p>导出为<code>pdf</code>，</p>
+<blockquote>
+<p>v0.9.3之前的版本这个方法不会返回数据，会直接触发下载。</p>
+</blockquote>
 <blockquote>
 <p>v0.6.0版本以后，需要额外注册一个ExportPDF插件</p>
+</blockquote>
+<blockquote>
+<p>内部导出pdf使用的是pdf-lib库将图片转为pdf，目前当节点数量比较大时导出pdf可能会丢失部分内容，所以建议有能力的开发者自行实现pdf的导出功能，如果项目中有后端开发，也可以寻求后端开发人员的支持。</p>
 </blockquote>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> ExportPDF <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportPDF.js&#x27;</span>
 MindMap.usePlugin(ExportPDF)
@@ -117,6 +129,11 @@ MindMap.usePlugin(ExportPDF)
 MindMap.usePlugin(ExportXMind)
 </code></pre>
 <p>导出为<code>xmind</code>文件类型，异步方法，返回一个<code>Promise</code>实例，返回的数据为一个<code>zip</code>压缩包的<code>data:url</code>数据，可以直接下载。</p>
+<h3>txt()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>导出<code>txt</code>文件。</p>
 
   </div>
 </template>

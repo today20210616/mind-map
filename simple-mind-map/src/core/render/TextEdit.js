@@ -3,7 +3,10 @@ import {
   checkNodeOuter,
   focusInput,
   selectAllInput,
-  htmlEscape
+  htmlEscape,
+  handleInputPasteText,
+  checkSmmFormatData,
+  getTextFromHtml
 } from '../../utils'
 import { ERROR_TYPES, CONSTANTS } from '../../constants/constant'
 
@@ -21,6 +24,7 @@ export default class TextEdit {
     this.showTextEdit = false
     // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
     this.cacheEditingText = ''
+    this.hasBodyMousedown = false
     this.bindEvent()
   }
 
@@ -38,7 +42,12 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    this.mindMap.on('body_mousedown', () => {
+      this.hasBodyMousedown = true
+    })
     this.mindMap.on('body_click', () => {
+      if (!this.hasBodyMousedown) return
+      this.hasBodyMousedown = false
       // 隐藏文本编辑框
       if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
         this.hideEditTextBox()
@@ -220,6 +229,16 @@ export default class TextEdit {
           e.stopPropagation()
         }
       })
+      this.textEditNode.addEventListener('paste', e => {
+        const text = e.clipboardData.getData('text')
+        const { isSmm, data } = checkSmmFormatData(text)
+        if (isSmm && data[0] && data[0].data) {
+          // 只取第一个节点的纯文本
+          handleInputPasteText(e, getTextFromHtml(data[0].data.text))
+        } else {
+          handleInputPasteText(e)
+        }
+      })
       const targetNode =
         this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
@@ -295,5 +314,13 @@ export default class TextEdit {
     this.textEditNode.style.fontWeight = 'normal'
     this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
+  }
+
+  // 获取当前正在编辑中的节点实例
+  getCurrentEditNode() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.node
+    }
+    return this.currentNode
   }
 }

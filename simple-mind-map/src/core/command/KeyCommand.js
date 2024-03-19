@@ -1,4 +1,5 @@
 import { keyMap } from './keyMap'
+
 //  快捷按键、命令处理类
 export default class KeyCommand {
   //  构造函数
@@ -66,9 +67,10 @@ export default class KeyCommand {
 
   // 按键事件
   onKeydown(e) {
+    const { enableShortcutOnlyWhenMouseInSvg, beforeShortcutRun } = this.mindMap.opt
     if (
       this.isPause ||
-      (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
+      (enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
     ) {
       return
     }
@@ -78,6 +80,10 @@ export default class KeyCommand {
         if (!this.checkKey(e, 'Control+v')) {
           e.stopPropagation()
           e.preventDefault()
+        }
+        if (typeof beforeShortcutRun === 'function') {
+          const isStop = beforeShortcutRun(key, [...this.mindMap.renderer.activeNodeList])
+          if (isStop) return
         }
         this.shortcutMap[key].forEach(fn => {
           fn()

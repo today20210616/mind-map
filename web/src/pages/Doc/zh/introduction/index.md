@@ -1,6 +1,6 @@
 # 简介
 
-`simple-mind-map`是一个简单&强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。
+`simple-mind-map`【中文名：思绪思维导图】是一个简单&强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。
 
 > 如果你只是想使用思维导图，你也完全可以把本项目的demo作为一个普通的在线思维导图工具使用。点击右上角的【在线示例】开始使用吧。
 >
@@ -19,6 +19,14 @@
 - [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
 - [x] 支持协同编辑
+
+> 不会实现的特性：
+>
+> 1.自由节点，即多个根节点；
+>
+> 2.概要节点后面继续添加节点；
+>
+> 如果你需要以上特性，那么本库可能无法满足你的需求。
 
 ## 仓库目录介绍
 
@@ -257,5 +265,63 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>HaHN</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/继龙.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>继龙</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/欣.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>欣</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>易空小易</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/国发.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>国发</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>建明</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/汪津合.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>汪津合</p>
+    </div>
+</div>
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>博文</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/慕智打印-兰兰.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>慕智打印-兰兰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>锦冰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/旭东.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>旭东</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/俊奇.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>俊奇</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/橘半.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>橘半</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>pluvet</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/皇登攀.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>皇登攀</p>
     </div>
 </div>

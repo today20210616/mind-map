@@ -31,6 +31,8 @@ class MindMap {
   constructor(opt = {}) {
     // 合并选项
     this.opt = this.handleOpt(merge(defaultOpt, opt))
+    // 预处理节点数据
+    this.opt.data = this.handleData(this.opt.data)
 
     // 容器元素
     this.el = this.opt.el
@@ -38,6 +40,10 @@ class MindMap {
 
     // 获取容器尺寸位置信息
     this.getElRectInfo()
+
+    // 画布初始大小
+    this.initWidth = this.width
+    this.initHeight = this.height
 
     // 添加css
     this.cssEl = null
@@ -94,8 +100,6 @@ class MindMap {
 
   //  配置参数处理
   handleOpt(opt) {
-    // 深拷贝一份节点数据
-    opt.data = simpleDeepClone(opt.data || {})
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
@@ -103,6 +107,16 @@ class MindMap {
     // 检查主题配置
     opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
     return opt
+  }
+
+  // 预处理节点数据
+  handleData(data) {
+    data = simpleDeepClone(data || {})
+    // 根节点不能收起
+    if (data.data && !data.data.expand) {
+      data.data.expand = true
+    }
+    return data
   }
 
   // 创建容器元素
@@ -294,6 +308,7 @@ class MindMap {
     if (!notRender) {
       this.render(null, CONSTANTS.CHANGE_LAYOUT)
     }
+    this.emit('layout_change', layout)
   }
 
   //  执行命令
@@ -303,7 +318,8 @@ class MindMap {
 
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
-    data = simpleDeepClone(data || {})
+    data = this.handleData(data)
+    this.opt.data = data
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
     this.command.addHistory()
@@ -407,31 +423,53 @@ class MindMap {
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
     // 克隆一份数据
     let clone = svg.clone()
-    // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
-    if (
-      !ignoreWatermark &&
-      (rect.width > origWidth || rect.height > origHeight) &&
-      this.watermark &&
-      this.watermark.hasWatermark()
-    ) {
-      this.width = rect.width
-      this.height = rect.height
-      this.watermark.draw()
-      clone = svg.clone()
-      this.width = origWidth
-      this.height = origHeight
-      this.watermark.draw()
+    // 是否存在水印
+    const hasWatermark = this.watermark && this.watermark.hasWatermark()
+    if (!ignoreWatermark && hasWatermark) {
+      this.watermark.isInExport = true
+      // 是否是仅导出时需要水印
+      const { onlyExport } = this.opt.watermarkConfig
+      // 是否需要重新绘制水印
+      const needReDrawWatermark =
+        rect.width > origWidth || rect.height > origHeight
+      // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
+      if (needReDrawWatermark) {
+        this.width = rect.width
+        this.height = rect.height
+        this.watermark.onResize()
+        clone = svg.clone()
+        this.width = origWidth
+        this.height = origHeight
+        this.watermark.onResize()
+      } else if (onlyExport) {
+        // 如果是仅导出时需要水印，那么需要进行绘制
+        this.watermark.onResize()
+        clone = svg.clone()
+      }
+      // 如果是仅导出时需要水印，需要清除
+      if (onlyExport) {
+        this.watermark.clear()
+      }
+      this.watermark.isInExport = false
     }
     // 添加必要的样式
     clone.add(SVG(`<style>${cssContent}</style>`))
-    // 修正关联线箭头marker的id
-    const markerList = svg.find('marker')
-    if (markerList && markerList.length > 0) {
-      const id = markerList[0].attr('id')
-      clone.find('marker').forEach(item => {
-        item.attr('id', id)
-      })
-    }
+    // 修正defs里定义的元素的id，因为clone时defs里的元素的id会继续递增，导致和内容中引用的id对不上
+    const defs = svg.find('defs')
+    const defs2 = clone.find('defs')
+    defs.forEach((def, defIndex) => {
+      const def2 = defs2[defIndex]
+      if (!def2) return
+      const children = def.children()
+      const children2 = def2.children()
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+        const child2 = children2[i]
+        if (child && child2) {
+          child2.attr('id', child.attr('id'))
+        }
+      }
+    })
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight)
     draw.transform(origTransform)

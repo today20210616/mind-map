@@ -10,7 +10,9 @@ export default {
     line: 'Line',
     width: 'Width',
     style: 'Style',
+    lineRadius: 'Radius',
     lineOfOutline: 'Line of outline',
+    showArrow: 'Is show arrow',
     nodePadding: 'Node padding',
     nodeMargin: 'Node margin',
     horizontal: 'Horizontal',
@@ -27,6 +29,7 @@ export default {
     enableFreeDrag: 'Enable node free drag',
     watermark: 'Watermark',
     showWatermark: 'Is show watermark',
+    onlyExport: 'Only export',
     watermarkDefaultText: 'Watermark text',
     watermarkText: 'Watermark text',
     watermarkTextColor: 'Text color',
@@ -55,7 +58,11 @@ export default {
     associativeLineText: 'Associative line text',
     fontFamily: 'Font family',
     fontSize: 'Font size',
-    isShowScrollbar: 'Is show scrollbar'
+    isShowScrollbar: 'Is show scrollbar',
+    isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
+    rootLineStartPos: 'Root line start pos',
+    center: 'Center',
+    right: 'Right'
   },
   color: {
     moreColor: 'More color'
@@ -87,7 +94,9 @@ export default {
     fitCanvas: 'Fit canvas',
     removeImage: 'Remove image',
     removeHyperlink: 'Remove hyperlink',
-    removeNote: 'Remove note'
+    removeNote: 'Remove note',
+    removeCustomStyles: 'Remove custom styles',
+    removeAllNodeCustomStyles: 'Remove all node custom styles'
   },
   count: {
     words: 'Words',
@@ -140,7 +149,8 @@ export default {
     openMiniMap: 'Open mini map',
     closeMiniMap: 'Close mini map',
     readonly: 'Change to eadonly',
-    edit: 'Change to edit'
+    edit: 'Change to edit',
+    backToRoot: 'Back to root node'
   },
   nodeHyperlink: {
     title: 'Link',
@@ -200,7 +210,13 @@ export default {
     line: 'Line',
     nodePadding: 'Node padding',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    gradientStyle: 'Gradient',
+    startColor: 'Start',
+    endColor: 'End',
+    arrowDir: 'Arrow dir',
+    arrowDirStart: 'Start',
+    arrowDirEnd: 'End'
   },
   theme: {
     title: 'Theme',
@@ -248,7 +264,8 @@ export default {
     fileContentError: 'File content error',
     fileOpenFailed: 'File open failed',
     defaultFileName: 'Mind map',
-    creatingTip: 'Creating file'
+    creatingTip: 'Creating file',
+    directory: 'Directory'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

@@ -61,7 +61,7 @@ const mindMap = new MindMap({
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 |   | z-index of node text edit box elements         |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | z-index of floating layer elements in node comments  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true | Whether to end the editing status of node text when clicking on an area outside the canvas  |          |
-| maxHistoryCount（v0.5.6+）     | Number  | 1000 |   | Maximum number of history records         |
+| maxHistoryCount（v0.5.6+）     | Number  | 1000（v0.9.2+ changed 500） |   | Maximum number of history records         |
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default  |          |
 | iconList（v0.5.8+）     | Array  | [] | The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the "Icon Configuration" table below for the detailed structure of the object  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool  |          |
@@ -105,6 +105,15 @@ const mindMap = new MindMap({
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  |  Highlight box style when the mouse moves into the summary to highlight the node it belongs to |         |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
 | defaultNodeImage（v0.9.1-fix.2+）     | String |   | Image address, the default image displayed when node image loading fails  |         |
+| handleNodePasteImg（v0.9.2+）     | null or Function | null  | The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }  |         |
+| isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |         |
+| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |         |
+| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values
+：left、top、bottom、right |         |
+| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | Is it allowed to adjust the position of the two endpoints of the associated line |         |
+| isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
+| onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
+| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
 
 ### Data structure
 
@@ -156,6 +165,7 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
 | angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
+| onlyExport（v0.9.2+）   | Boolean | false |  Is only add watermarks during export                        |
 
 ### Icon Configuration
 
@@ -414,6 +424,10 @@ Listen to an event. Event list:
 | set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
 | resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
 | beforeDestroy（v0.9.0+）    |  Triggered before destroying the mind map, i.e. triggered by calling the destroy method  |   |
+| body_mousedown（v0.9.2+）    | Mousedown event of document.body                      | e（event object）      |
+| body_click    | Click event of document.body                       | e（event object）      |
+| data_change_detail（v0.9.3+）    |  The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update  | arr（Detail data）      |
+| layout_change（v0.9.4+）    |  Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called | layout（New layout）      |
 
 ### emit(event, ...args)
 
@@ -507,7 +521,7 @@ redo. All commands are as follows:
 | EXPAND_ALL                         | Expand all nodes                                             |                                                              |
 | UNEXPAND_ALL                       | Collapse all nodes                                           |                                                              |
 | UNEXPAND_TO_LEVEL (v0.2.8+)        | Expand to a specified level                                  | level (the level to expand to, 1, 2, 3...)                   |
-| SET_NODE_DATA                      | Update node data, that is, update the data in the data object of the node data object | node (the node to set), data (object, the data to update, e.g. `{expand: true}`) |
+| SET_NODE_DATA                      | Update node data, that is, update the data in the data object of the node data object. Note that this command will not trigger view updates | node (the node to set), data (object, the data to update, e.g. `{expand: true}`) |
 | SET_NODE_TEXT                      | Set node text                                                | node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to `true`）、resetRichText（v0.6.10+Do you want to reset rich text? The default is false. If true is passed, the style of the rich text node will be reset） |
 | SET_NODE_IMAGE                     | Set Node Image                                               | node (node to set), imgData (object, image information, structured as: `{url, title, width, height}`, the width and height of the image must be passed) |
 | SET_NODE_ICON                      | Set Node Icon                                                | node (node to set), icons (array, predefined image names array, available icons can be obtained in the nodeIconList list in the [icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js) file, icon name is type_name, such as ['priority_1']) |
@@ -522,12 +536,15 @@ redo. All commands are as follows:
 | SET_NODE_CUSTOM_POSITION (v0.2.0+) | Set a custom position for a node                             | node (the node to set), left (custom x coordinate, default is undefined), top (custom y coordinate, default is undefined) |
 | RESET_LAYOUT (v0.2.0+)             | Arrange layout with one click                                |                                                              |
 | SET_NODE_SHAPE (v0.2.4+)           | Set the shape of a node                                      | node (the node to set), shape (the shape, all shapes: [Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)) |
-| GO_TARGET_NODE（v0.6.7+）           |  Navigate to a node, and if the node is collapsed, it will automatically expand to that node   | node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion） |
+| GO_TARGET_NODE（v0.6.7+）           |  Navigate to a node, and if the node is collapsed, it will automatically expand to that node   | node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion, v0.9.8+receives a parameter representing the target node instance） |
 | INSERT_MULTI_NODE（v0.7.2+）           |  Insert multiple sibling nodes into the specified node at the same time, with the operating node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, nodeList（Data list of newly inserted nodes, array type） |
 | INSERT_MULTI_CHILD_NODE（v0.7.2+）           |  Insert multiple child nodes into the specified node simultaneously, with the operation node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, childList（Data list of newly inserted nodes, array type） |
 | INSERT_FORMULA（v0.7.2+）           |  Insert mathematical formulas into nodes, operate on the currently active node or specified node   | formula（Mathematical formula to insert, LaTeX syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node） |
 | INSERT_PARENT_NODE（v0.8.0+）           |  Insert a parent node into the specified node, with the operation node being the currently active node or the specified node   | openEdit（Activate the newly inserted node and enter editing mode, default to 'true'`）、 appointNodes（Optional, specify the node to insert into the parent node, and specify that multiple nodes can pass an array）、 appointData（Optional, specify the data for the newly created node, such as {text: 'xxx', ...}, Detailed structure can be referenced [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
 | REMOVE_CURRENT_NODE（v0.8.0+）           |  Delete only the current node, operate on the currently active node or specified node    | appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array） |
+| MOVE_UP_ONE_LEVEL（v0.9.6+）           | Move the specified node up one level     | node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node） |
+| REMOVE_CUSTOM_STYLES（v0.9.7+）           |  One click removal of custom styles for a node    | node（Optional, specify the node to clear the custom style, otherwise it will be the first one in the current active node） |
+| REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）           |   One click removal of multiple nodes or custom styles for all nodes   | appointNodes（Optional, node instance array, specifying multiple nodes to remove custom styles from. If not passed, the custom styles of all nodes on the current canvas will be removed） |
 
 ### setData(data)
 

@@ -88,6 +88,9 @@
       <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
         <span class="name">{{ $t('contextmenu.removeNote') }}</span>
       </div>
+      <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">
+        <span class="name">{{ $t('contextmenu.removeCustomStyles') }}</span>
+      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -125,6 +128,11 @@
         <span class="name">{{ $t('contextmenu.zenMode') }}</span>
         {{ isZenMode ? '√' : '' }}
       </div>
+      <div class="item" @click="exec('REMOVE_ALL_NODE_CUSTOM_STYLES')">
+        <span class="name">{{
+          $t('contextmenu.removeAllNodeCustomStyles')
+        }}</span>
+      </div>
     </template>
   </div>
 </template>
@@ -159,7 +167,7 @@ export default {
   computed: {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
-      isDark: state => state.isDark
+      isDark: state => state.localConfig.isDark
     }),
     expandList() {
       return [

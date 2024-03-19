@@ -252,7 +252,7 @@
 <tr>
 <td>maxHistoryCount（v0.5.6+）</td>
 <td>Number</td>
-<td>1000</td>
+<td>1000（v0.9.2+改为500）</td>
 <td>最大历史记录数</td>
 </tr>
 <tr>
@@ -513,6 +513,54 @@
 <td></td>
 <td>图片地址，当节点图片加载失败时显示的默认图片</td>
 </tr>
+<tr>
+<td>handleNodePasteImg（v0.9.2+）</td>
+<td>null 或 Function</td>
+<td>null</td>
+<td>在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvas（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
+</tr>
+<tr>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right</td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否允许调整关联线两个端点的位置</td>
+</tr>
+<tr>
+<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅搜索当前渲染的节点，被收起的节点不会被搜索到</td>
+</tr>
+<tr>
+<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>协同编辑时，同一个节点不能同时被多人选中</td>
+</tr>
+<tr>
+<td>beforeCooperateUpdate（v0.9.8+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -591,6 +639,12 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>水印文字样式</td>
+</tr>
+<tr>
+<td>onlyExport（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅在导出时添加水印</td>
 </tr>
 </tbody>
 </table>
@@ -983,6 +1037,26 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>思维导图销毁前触发，即调用了destroy方法触发</td>
 <td></td>
 </tr>
+<tr>
+<td>body_mousedown（v0.9.2+）</td>
+<td>document.body的鼠标按下事件</td>
+<td>e（事件对象）</td>
+</tr>
+<tr>
+<td>body_click</td>
+<td>document.body的点击事件</td>
+<td>e（事件对象）</td>
+</tr>
+<tr>
+<td>data_change_detail（v0.9.3+）</td>
+<td>渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个<code>type</code>属性，代表明细的类型，包含<code>create</code>（创建节点）、<code>update</code>（更新节点）、<code>delete</code>（删除节点），存在一个<code>data</code>属性，代表当前更新的节点数据，如果是<code>update</code>类型，还会存在一个<code>oldData</code>属性，保存了更新前该节点的数据</td>
+<td>arr（明细数据）</td>
+</tr>
+<tr>
+<td>layout_change（v0.9.4+）</td>
+<td>修改结构时触发，即调用了mindMap.setLayout()方法时触发</td>
+<td>layout（新的结构）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1132,7 +1206,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>SET_NODE_DATA</td>
-<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据</td>
+<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据，注意这个命令不会触发视图的更新</td>
 <td>node（要设置的节点）、data（对象，要更新的数据，如<code>{expand: true}</code>）</td>
 </tr>
 <tr>
@@ -1208,7 +1282,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
-<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数）</td>
+<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数，v0.9.8+接收一个参数，代表目标节点实例）</td>
 </tr>
 <tr>
 <td>INSERT_MULTI_NODE（v0.7.2+）</td>
@@ -1234,6 +1308,21 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>REMOVE_CURRENT_NODE（v0.8.0+）</td>
 <td>仅删除当前节点，操作节点为当前激活的节点或指定节点</td>
 <td>appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组）</td>
+</tr>
+<tr>
+<td>MOVE_UP_ONE_LEVEL（v0.9.6+）</td>
+<td>将指定节点上移一个层级</td>
+<td>node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个）</td>
+</tr>
+<tr>
+<td>REMOVE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>一键去除某个节点的自定义样式</td>
+<td>node（可选，指定要清除自定义样式的节点，不传则为当前激活节点中的第一个）</td>
+</tr>
+<tr>
+<td>REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>一键去除多个节点或所有节点的自定义样式</td>
+<td>appointNodes（可选，节点实例数组，指定要去除自定义样式的多个节点，如果不传则会去除当前画布所有节点的自定义样式）</td>
 </tr>
 </tbody>
 </table>

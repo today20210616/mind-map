@@ -31,6 +31,16 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>highlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Highlight node.</p>
+<h3>closeHighlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Unhighlight node.</p>
 <h3>getPureData(removeActiveState = true, removeId = false)</h3>
 <blockquote>
 <p>v0.9.0+</p>
@@ -161,11 +171,11 @@ default <code>false</code></p>
 if <code>key</code> is not passed, return the <code>data</code> object</p>
 <h3>setData(data)</h3>
 <p>Set the value of the specified key in the data object of the node's real data
-nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
-<h3>setText(text, richText)</h3>
+nodeData, <code>SET_NODE_DATA</code> command's shortcut method. This method and command will not update the view, so if you want to modify the text, use the 'setText' method or use the command pointing to the text.</p>
+<h3>setText(text, richText, resetRichText)</h3>
 <ul>
 <li>
-<p><code>richText</code>: v0.4.2+，<code>Boolean</code>, If you want to set rich text content, that is, <code>html</code> character, <code>richText</code> needs to be passed <code>true</code></p>
+<p><code>richText</code>: v0.4.2+，<code>Boolean</code>, If you want to set rich text content, that is, <code>html</code> character, <code>richText</code> needs to be passed <code>true</code>. After version 0.9.3+, if this parameter is not passed, it will use previous value.</p>
 </li>
 <li>
 <p><code>resetRichText</code>: v0.6.10+, <code>Boolean</code>, whether to reset rich text, The default is 'false'. If 'true' is passed, the style of the rich text node will be reset</p>

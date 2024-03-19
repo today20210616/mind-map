@@ -2,12 +2,12 @@
 
 [![npm-version](https://img.shields.io/npm/v/simple-mind-map)](https://www.npmjs.com/package/simple-mind-map)
 ![npm download](https://img.shields.io/npm/dm/simple-mind-map)
-[![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/issues)
-[![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 ![license](https://img.shields.io/npm/l/express.svg)
+[![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 
-> 一个简单&强大的Web思维导图
+> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图。
 
 本项目包含两部分：
 
@@ -35,7 +35,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 - [x] 节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式
 - [x] 节点支持拖拽（拖拽移动、自由调整）、多种节点形状，支持使用 DDM 完全自定义节点内容
 - [x] 支持画布拖动、缩放
-- [x] 支持鼠标按键拖动选择和Ctrl+左键两种多选节点方式
+- [x] 支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`、`xmind`，支持从`json`、`xmind`、`markdown`导入
 - [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
@@ -49,7 +49,7 @@ npm i simple-mind-map
 
 # 使用
 
-提供一个宽高不为0的容器元素：
+提供一个宽高不为 0 的容器元素：
 
 ```html
 <div id="mindMapContainer"></div>
@@ -70,13 +70,13 @@ npm i simple-mind-map
 import MindMap from "simple-mind-map";
 
 const mindMap = new MindMap({
-  el: document.getElementById('mindMapContainer'),
+  el: document.getElementById("mindMapContainer"),
   data: {
-    "data": {
-        "text": "根节点"
+    data: {
+      text: "根节点",
     },
-    "children": []
-  }
+    children: [],
+  },
 });
 ```
 
@@ -88,9 +88,17 @@ const mindMap = new MindMap({
 
 [MIT](./LICENSE)
 
+保留`mind-map`版权声明的情况下可随意商用。如果你不想保留可以联系作者。
+
 # 微信交流群
 
 群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。
+
+# star
+
+如果喜欢本项目，欢迎点个star，这对我们很重要。
+
+[![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
 
 # 请作者喝杯咖啡
 
@@ -237,5 +245,61 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;" />
         <span>HaHN</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/继龙.jpg" style="width: 50px;height: 50px;" />
+        <span>继龙</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/欣.jpg" style="width: 50px;height: 50px;" />
+        <span>欣</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>易空小易</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/国发.jpg" style="width: 50px;height: 50px;" />
+        <span>国发</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>建明</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/汪津合.jpg" style="width: 50px;height: 50px;" />
+        <span>汪津合</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>博文</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/慕智打印-兰兰.jpg" style="width: 50px;height: 50px;" />
+        <span>慕智打印-兰兰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>锦冰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/旭东.png" style="width: 50px;height: 50px;" />
+        <span>旭东</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/俊奇.jpg" style="width: 50px;height: 50px;" />
+        <span>俊奇</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/橘半.jpg" style="width: 50px;height: 50px;" />
+        <span>橘半</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;" />
+        <span>pluvet</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/皇登攀.jpg" style="width: 50px;height: 50px;" />
+        <span>皇登攀</span>
     </span>
 </p>

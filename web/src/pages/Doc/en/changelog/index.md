@@ -1,5 +1,189 @@
 # Changelog
 
+## 0.9.8
+
+Fix:
+
+> 1.Fix the issue of incorrect calculation function of mind maps within the canvas and scroll bar positions when the canvas size changes;
+>
+> 2.Fix the issue of errors when importing some old version xmind files;
+>
+> 3.Fix the issue where the highlight box of the collapsed node does not disappear when searching for highlighted nodes in read-only mode;
+>
+> 4.Fix the issue where data changes during search and search results are not updated in certain situations;
+>
+> 5.Fix the issue of deleting adjacent nodes when deleting nodes that are currently being edited;
+>
+> 6.Fix the issue of rendering only the root node when expand: false is set to the root node in the node data;
+>
+> 7.Fix the collaborative editing plugin: When a node is selected and then folded, the activation status of the node disappears, but the selected status of the node still exists in other clients;
+>
+> 8.Optimize the export of markdowns and fix the issue of missing summaries;
+>
+> 9.Fix the issue of ineffective forward and backward operations on node positions during free drag and drop;
+
+New:
+
+> 1.The commands such as INSERTNODE will not overwrite custom UIDs;
+>
+> 2.Methods for adding and removing highlighting for node instances; Adjust the way read-only mode searches for highlighted nodes;
+>
+> 3.Add configuration for searching all nodes (including those that have been folded); Search defaults to searching all nodes;
+>
+> 4.Add configuration options that cannot be selected by multiple people on the same node during collaborative editing;
+>
+> 5.Add lifecycle function configuration options before synchronizing collaborative editing node operations;
+>
+> 6.Add UID field to the summary node;
+>
+> 7.Added support for exporting txt files;
+
+Demo:
+
+> 1.Fix the issue where shortcut keys become invalid after opening label pop ups and note pop ups and clicking on the mask to close them;
+>
+> 2.Modify the association logic between themes and dark colors;
+>
+> 3.Support reading local directories;
+>
+> 4.Fix the issue of selecting a file in the import pop-up window and then deleting it without actually deleting it;
+>
+> 5.Export new txt files;
+
+## 0.9.7
+
+Fix:
+
+> 1.Fix the issue where the style is not updated when dragging nodes below level 2 to the root node to become level 2 nodes; Fix the issue where the style is not updated when moving nodes with the command to move up one level;
+>
+> 2.Fix the issue of losing focus when activating summary nodes and then setting text styles for them;
+
+New:
+
+> 1.Add two commands to remove custom styles from nodes;
+
+Demo:
+
+> 1.Add a right-click menu button to remove custom styles from nodes.
+
+## 0.9.6
+
+Fix:
+
+> 1.Fix the issue where the style of the collapsed nodes remains unchanged when switching themes;
+>
+> 2.Fix the issue of losing the new text style when switching themes for text wrapping;
+>
+> 3.Fix the issue where the style of the newline text remains unchanged when switching themes;
+>
+> 4.Fixed the issue of adding mathematical formulas to nodes and not changing the text style when switching themes;
+
+New:
+
+> 1.Add new fields to the theme, used to set the display position, head or tail, of node line arrows;
+>
+> 2.New field added to the theme, used to set the starting position of the root node line when connecting curves;
+>
+> 3.Mac dual finger touch event moves the canvas to increase sensitivity slightly;
+>
+> 4.Add MOVE_ UP_ ONE_ The LEVEL command is used to move a node up one level;
+
+Demo:
+
+> 1.The outline supports pressing Shift+Tab to move nodes up one level;
+>
+> 2.Support setting the position of node arrow display;
+>
+> 3.Support setting the starting position of root node connections;
+>
+> 4.Add two new themes;
+>
+> 5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag; 
+
+## 0.9.5
+
+Fix:
+
+> 1.Fix the issue of missing inter zone summaries when expanding and folding nodes.
+>
+> 2.Fix the issue where the position of the newly created associated line is always on the right side of the node without changing according to its relative position.
+
+New:
+
+> 1.Add configuration for the initial positions of the two endpoints when creating associated lines.
+>
+> 2.Add a configuration that prohibits adjusting the endpoint position of associated lines.
+>
+> 3.Add a hand drawn style plugin.
+
+Demo:
+
+> 1.Optimize interface adaptation on mobile devices.
+>
+> 2.Supports enabling hand drawn styles.
+
+## 0.9.4
+
+Fix:
+
+> 1.Fix the issue of inconsistent text wrapping caused by inconsistent text area width during node display and editing in some cases.
+>
+> 2.Fixed the issue where gradients were not applied to the edit box during rich text editing for nodes with gradient backgrounds.
+>
+> 3.Fix the issue of text style loss after switching themes for nodes defined in bold by the theme.
+>
+> 4.Fix the issue on Mac where the useLeftKeySelectionRightKeyDrag option is set to true and cannot hold down the Ctrl key to select multiple nodes.
+>
+> 5.Fix the issue where text styles are lost after clearing styles during node rich text editing, and switching themes does not restore them.
+>
+> 6.Fix data issue when deleting nodes with child nodes_ Change_ The issue of error reporting in detail events.
+
+New:
+
+> 1.Add the lineRadius property to the theme configuration to set the size of the rounded corners when connecting straight lines.
+
+Demo:
+
+> 1.Remove the display of formulas from the outline.
+>
+> 2.Some configurations in the basic style that only support partial structures are displayed and hidden based on the current structure.
+>
+> 3.Add configuration for connecting rounded corners.
+>
+> 4.Automatically hide the sidebar when importing files.
+
+## 0.9.3
+
+Fix
+
+> 1.Fix the issue of text misalignment when nodes have icons in Safari browser.
+>
+> 2.Fix the issue of formula rendering in browsers with lower versions of Chrome kernel.
+>
+> 3.Fix the issue of new MouseEvent code execution errors when used in micro front-end framework applications.
+>
+> 4.Fix the issue of missing arrows on node connections, arrows on associated lines, and gradient backgrounds when exporting images.
+
+New:
+
+> 1.Export PDF from jspdf library to pdf-lib library.
+>
+> 2.If the second parameter of the set node text command (SETNODE-TEXT) is not passed, the previous value will be used.
+>
+> 3.There is an issue of incorrect width and height of exported images in Firefox browser when optimizing nodes with hyperlinks and comments.
+>
+> 4.In node text editing, if the pasted data is in SMM format, the pure text of the first node will be taken out for pasting.
+>
+> 5.Add interception operations for pasting when editing nodes without rich text.
+>
+> 6.Add a detailed event (data_change_detail) for updating node data, which can retrieve newly created, updated, or deleted node data.
+>
+> 7.Theme configuration supports setting node gradient background color.
+
+Demo:
+
+1.Support setting the background of node gradients.
+
 ## 0.9.2
 
 Fix:
@@ -13,6 +197,24 @@ Fix:
 > 4.Fix the issue of the canvas moving in the opposite direction when scrolling horizontally with the mouse or touchpad.
 >
 > 5.Fix the issue where the mouse in flag is not reset when a node is destroyed.
+>
+> 6.Fix the issue of incorrect position calculation in the scrollbar plugin when the 'initRootNodePosition' configuration is not set to the default '[center, center]'.
+>
+> 7.Fix the issue where dragging the canvas cannot stop when the mouse is released on the node.
+>
+> 8.Fix the issue of errors in the position calculated by the view. fit method when the canvas container is not 0 from the top left corner of the browser window.
+>
+> 9.Fix the issue where the watermark in the exported image does not fully cover the entire image when there are a large number of nodes.
+>
+> 10.Fix the issue of inserting formula errors.
+>
+> 11.Fix the issue of losing the selected text status when the mouse moves out of the editing box while selecting text in the node text editing state.
+>
+> 12.When repairing node rich text editing, Fix the issue 'rich_text_selection_change' event is not triggered when the text selection range is 'null'.
+>
+> 13.Fix the issue of no 'node' instance in the 'node_dragging' event callback.
+>
+> 14.Fix the issue of too many nodes and the canvas size being too large to export PNG.
 
 New:
 
@@ -21,6 +223,28 @@ New:
 > 2.The TextEdit class adds the isShowTextEdit method to determine whether the current node is in an editing state.
 >
 > 3.Change the paste method of the render class to support pasting clipboard data.
+>
+> 4.Add a configuration option to restrict mind map graphics within the canvas.
+>
+> 5.When registering the scrollbar plugin, it supports configuring whether to restrict the mind map within the canvas.
+>
+> 6.Folding all nodes will move the mind map root node to the center of the canvas.
+>
+> 7.Support the configuration option of displaying watermarks only during export.
+>
+> 8.When pasting images from the clipboard at a node, custom processing functions are supported to upload the images to your server.
+>
+> 9.Refactoring the export logic of the PDF, the exported PDF size is no longer a fixed A4, but the size of the mind map, while deleting the configuration for pagination export.
+>
+> 10.Node connections support displaying arrows as a field for the theme.
+>
+> 11.The maximum number of historical records is adjusted to 500 by default.
+
+Demo：
+
+> 1.Support configuration to display watermarks only during export.
+>
+> 2.Basic style configuration line supports displaying arrows.
 
 ## 0.9.1-fix.2
 
